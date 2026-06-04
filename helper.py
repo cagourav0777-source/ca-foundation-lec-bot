@@ -123,11 +123,11 @@ def time_name():
 async def download_video(url, name, raw_text2):
     try:
         output_file = f"{name}.mp4"
-        
+
         command = [
                 "yt-dlp",
-                "-k", 
-                "--allow-unplayable-formats", 
+                "-k",
+                "--allow-unplayable-formats",
                 "--geo-bypass",
                 "--cookies", "cookies.txt",
                 "-f", "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b",
@@ -135,29 +135,29 @@ async def download_video(url, name, raw_text2):
                 "--fixup", "never",
                 url,
                 "--external-downloader", "aria2c",
-                "--external-downloader-args", "-x 16 -s 16 -k 1M", 
+                "--external-downloader-args", "-x 16 -s 16 -k 1M",
                 "--output", output_file,
                 "--merge-output-format", "mp4",
         ]
-            
+
         result = subprocess.run(command, check=True, text=True, stderr=subprocess.PIPE)
-        
+
         if result.returncode == 0:
             print(f"Successfully downloaded: {output_file}")
-                                
+
             if os.path.isfile(output_file):
                 return output_file
 
         else:
             print(f"yt-dlp command failed: {result.stderr.strip()}")
-            return None, f"yt-dlp command failed: {result.stderr.strip()}"
+            return None
 
     except FileNotFoundError as exc:
         print(f"File not found: {exc}")
-        return None, f"File not found: {exc}"
+        return None
     except subprocess.CalledProcessError as e:
         print(f"An error occurred: {e.stderr.strip()}")
-        return None, f"An error occurred: {e.stderr.strip()}"
+        return None
         
 async def send_vid(bot: Client, m: Message, cc, filename, thumb, name):
 
