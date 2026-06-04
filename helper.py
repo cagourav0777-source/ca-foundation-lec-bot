@@ -124,23 +124,22 @@ async def download_video(url, name, raw_text2):
     try:
         output_file = f"{name}.mp4"
 
+        # Try without cookies first (more reliable)
         command = [
                 "yt-dlp",
                 "-k",
                 "--allow-unplayable-formats",
                 "--geo-bypass",
-                "--cookies", "cookies.txt",
                 "-f", "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b",
                 "-S", f"res~{raw_text2},+size,+br",
                 "--fixup", "never",
                 url,
-                "--external-downloader", "aria2c",
-                "--external-downloader-args", "-x 16 -s 16 -k 1M",
                 "--output", output_file,
                 "--merge-output-format", "mp4",
+                "--no-warnings",
         ]
 
-        result = subprocess.run(command, check=True, text=True, stderr=subprocess.PIPE)
+        result = subprocess.run(command, check=True, text=True, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 
         if result.returncode == 0:
             print(f"Successfully downloaded: {output_file}")
@@ -157,6 +156,9 @@ async def download_video(url, name, raw_text2):
         return None
     except subprocess.CalledProcessError as e:
         print(f"An error occurred: {e.stderr.strip()}")
+        return None
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
         return None
         
 async def send_vid(bot: Client, m: Message, cc, filename, thumb, name):
