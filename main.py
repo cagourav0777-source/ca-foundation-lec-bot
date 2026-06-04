@@ -242,7 +242,7 @@ async def account_login(bot: Client, m: Message):
                         await helper.send_vid(bot, m, cc, res_file, thumb, name)
                         count += 1
                     else:
-                        await m.reply_text(f"**Download failed for:** `{name}`")
+                        await m.reply_text(f"**Download failed for:** `{name}`\n**URL:** `{url}`\n\nTry checking if the link is valid or if the PW token is working.")
                         count += 1
 
             except Exception as e:
