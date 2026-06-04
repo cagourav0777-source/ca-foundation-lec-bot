@@ -237,10 +237,13 @@ async def account_login(bot: Client, m: Message):
                 else:
                     prog = await m.reply_text(f"**Downloading:-**\n\n** Video Name :-** `{name}\nQuality - {raw_text2}`\n**link:**`{url}`**")
                     res_file = await helper.download_video(url, name, raw_text2)
-                    filename = res_file
                     await prog.delete(True)
-                    await helper.send_vid(bot, m, cc, filename, thumb, name)
-                    count += 1
+                    if res_file:
+                        await helper.send_vid(bot, m, cc, res_file, thumb, name)
+                        count += 1
+                    else:
+                        await m.reply_text(f"**Download failed for:** `{name}`")
+                        count += 1
 
             except Exception as e:
                 await m.reply_text(f"**This #Failed File is not Counted**\n**Name** =>> `{name}`\n**Link** =>> `{url}`\n\n ** fail reason »** {e}")
