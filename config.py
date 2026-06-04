@@ -1,5 +1,5 @@
-API_ID = ""
-API_HASH = ""
-BOT_TOKEN = ""
-AUTH_USERS = [7890781002]
+api_id = ""
+api_hash = ""
+bot_token = ""
+auth_users = [7890781002]
 sudo_users = [7890781002]
